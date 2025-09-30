@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador Interativo de YAML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A tab-based single-page application is chosen for optimal user experience. This structure allows for progressive disclosure of information, starting from 'Fundamentos', moving to 'Estruturas de Dados', then 'Recursos Avançados', and finally a 'Exemplo Prático'. This non-linear navigation empowers users to learn at their own pace and jump to sections of interest. The final tab provides an interactive code block where clicking on different YAML constructs displays contextual explanations, solidifying the user's understanding by connecting theory to a real-world use case (a docker-compose file). This design prioritizes clarity, user control, and interactive learning over a simple linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: YAML syntax and concepts. Goal: Inform, Organize, Relate. Viz/Presentation: Structured HTML/CSS code blocks. Interaction: Tab navigation to switch between topics. Copy-to-clipboard buttons on code snippets. Justification: For a syntax-heavy topic, clear, well-formatted code examples are the most effective teaching tool. Charts are irrelevant.
+        - Report Info: Real-world docker-compose example. Goal: Relate, Organize. Viz/Presentation: A styled HTML code block with an adjacent explanation panel. Interaction: Key parts of the YAML code are clickable (`span` elements). Clicking updates the explanation panel with details about that specific syntax. Justification: This creates a direct, interactive link between abstract rules and their practical application, which is highly effective for learning and retention.
+        - Library/Method: Vanilla JavaScript for all interactions (tab switching, clicks, copy). Tailwind CSS for styling. 
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f5;
+            color: #44403c;
+        }
+        .font-code {
+            font-family: 'Fira Code', monospace;
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+            font-weight: 600;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            position: relative;
+        }
+        .code-block pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #e2e8f0;
+            color: #475569;
+            border: none;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #cbd5e1;
+        }
+        .interactive-yaml span {
+            cursor: pointer;
+            padding: 2px 0;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        .interactive-yaml span:hover {
+            background-color: #dbeafe;
+        }
+        .interactive-yaml span.selected {
+            background-color: #bfdbfe;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900">Explorador Interativo de YAML</h1>
+            <p class="mt-3 text-lg text-stone-600 max-w-3xl mx-auto">Uma introdução visual e prática à sintaxe e aos conceitos do YAML, projetada para ser clara e legível.</p>
+        </header>
+
+        <div class="w-full max-w-6xl mx-auto bg-white/60 backdrop-blur-sm rounded-xl shadow-lg border border-stone-200">
+            <nav class="border-b border-stone-200 flex flex-wrap">
+                <button data-tab="fundamentos" class="tab-btn flex-grow text-sm md:text-base text-stone-600 p-4 border-b-2 border-transparent hover:bg-stone-50 hover:text-blue-600 active">Fundamentos</button>
+                <button data-tab="estruturas" class="tab-btn flex-grow text-sm md:text-base text-stone-600 p-4 border-b-2 border-transparent hover:bg-stone-50 hover:text-blue-600">Estruturas de Dados</button>
+                <button data-tab="avancado" class="tab-btn flex-grow text-sm md:text-base text-stone-600 p-4 border-b-2 border-transparent hover:bg-stone-50 hover:text-blue-600">Recursos Avançados</button>
+                <button data-tab="exemplo" class="tab-btn flex-grow text-sm md:text-base text-stone-600 p-4 border-b-2 border-transparent hover:bg-stone-50 hover:text-blue-600">Exemplo Prático</button>
+            </nav>
+            
+            <div class="p-6 md:p-8">
+                <div id="fundamentos" class="content-section active">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-2">Sintaxe Essencial e Tipos de Dados</h2>
+                    <p class="mb-6 text-stone-600">O YAML se baseia em dois conceitos principais: pares chave-valor para representar dados e indentação (espaços) para denotar estrutura. Ele infere automaticamente os tipos de dados mais comuns.</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="code-block">
+                            <button class="copy-btn">Copiar</button>
+                            <pre class="font-code text-sm"><code class="language-yaml"># Pares Chave-Valor
+chave: valor
+
+# Strings (com ou sem aspas)
+nome_do_site: "Meu Site Incrível"
+outro_nome: Apenas um site
+
+# Números (inteiros e decimais)
+idade: 35
+preco: 19.99
+
+# Booleanos (verdadeiro ou falso)
+publicado: true
+em_destaque: false
+
+# Valor Nulo
+descricao: null</code></pre>
+                        </div>
+                        <div class="prose prose-stone max-w-none">
+                            <h3 class="font-semibold text-stone-700">Pontos-Chave:</h3>
+                            <ul>
+                                <li><strong>Chave-Valor:</strong> A base de tudo no YAML. A sintaxe é `chave: valor`. Note o espaço após os dois pontos.</li>
+                                <li><strong>Indentação é Estrutura:</strong> O YAML usa espaços (não tabs!) para criar aninhamento e hierarquia. A consistência no número de espaços é crucial.</li>
+                                <li><strong>Comentários:</strong> Qualquer texto após um `#` é um comentário e é ignorado.</li>
+                                <li><strong>Tipos de Dados:</strong> YAML reconhece automaticamente `strings`, `números`, `booleanos` (`true`/`false`) e `null` (nulo).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="estruturas" class="content-section">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-2">Estruturas de Dados: Listas e Dicionários</h2>
+                    <p class="mb-6 text-stone-600">Para organizar dados, o YAML usa listas (sequências) e dicionários (mapeamentos). A combinação dessas duas estruturas permite modelar praticamente qualquer dado complexo.</p>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-stone-700 mb-2">Listas (Sequências)</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copiar</button>
+                                    <pre class="font-code text-sm"><code class="language-yaml"># Uma lista simples de strings
+linguagens:
+  - Python
+  - JavaScript
+  - Go</code></pre>
+                                </div>
+                                <p class="text-stone-600 self-center">Uma lista é uma coleção de itens. Cada item começa com um hífen e um espaço (`- `). Todos os itens devem ter o mesmo nível de indentação.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-stone-700 mb-2">Dicionários (Mapeamentos) Aninhados</h3>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copiar</button>
+                                    <pre class="font-code text-sm"><code class="language-yaml"># Um dicionário com outro dicionário dentro
+configuracao:
+  database:
+    host: localhost
+    porta: 5432
+    usuario: admin</code></pre>
+                                </div>
+                                <p class="text-stone-600 self-center">Um dicionário (ou mapeamento) é uma coleção de pares chave-valor. Você pode aninhar dicionários para criar hierarquias, simplesmente indentando o dicionário interno.</p>
+                            </div>
+                        </div>
+
+                         <div>
+                            <h3 class="text-lg font-semibold text-stone-700 mb-2">Listas de Dicionários (Padrão Comum)</h3>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copiar</button>
+                                    <pre class="font-code text-sm"><code class="language-yaml"># Uma lista onde cada item é um dicionário
+usuarios:
+  - nome: Alice
+    email: alice@email.com
+    admin: true
+  - nome: Bob
+    email: bob@email.com
+    admin: false</code></pre>
+                                </div>
+                                <p class="text-stone-600 self-center">Este é um dos padrões mais poderosos e utilizados. `usuarios` é uma lista, e cada elemento (`-`) é um objeto complexo (um dicionário) com suas próprias chaves e valores.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="avancado" class="content-section">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-2">Recursos Avançados e Melhores Práticas</h2>
+                    <p class="mb-6 text-stone-600">O YAML possui recursos que ajudam a manter seus arquivos limpos, legíveis e sem repetições, especialmente em configurações complexas.</p>
+                    
+                     <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-stone-700 mb-2">Strings de Múltiplas Linhas</h3>
+                            <p class="mb-4 text-stone-600">Para textos longos, você pode usar `|` para preservar as quebras de linha (literal) ou `>` para dobrá-las em uma única linha (dobrado).</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copiar</button>
+                                    <pre class="font-code text-sm"><code class="language-yaml"># Estilo Literal: Preserva quebras de linha
+script_shell: |
+  echo "Iniciando processo..."
+  python main.py
+  echo "Finalizado."
+
+# Estilo Dobrado: Converte quebras de linha em espaços
+paragrafo: >
+  Este texto era muito longo e foi
+  escrito em várias linhas, mas
+  o YAML irá juntar tudo
+  em uma única linha.</code></pre>
+                                </div>
+                                <div class="prose prose-stone max-w-none">
+                                    <ul>
+                                        <li>Use <code>|</code> (estilo literal) quando o espaçamento e as quebras de linha são importantes, como em scripts, poesia ou logs.</li>
+                                        <li>Use <code>&gt;</code> (estilo dobrado) para descrições ou parágrafos longos, onde você quer que o resultado final seja uma string contínua, mas o código-fonte permaneça legível.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-stone-700 mb-2">Âncoras (`&`) e Aliases (`*`) para Reutilização</h3>
+                             <p class="mb-4 text-stone-600">Para evitar a repetição de blocos de código (princípio DRY), você pode definir uma âncora e reutilizá-la em outros lugares com um alias.</p>
+                             <div class="grid md:grid-cols-2 gap-6">
+                                <div class="code-block">
+                                    <button class="copy-btn">Copiar</button>
+                                    <pre class="font-code text-sm"><code class="language-yaml"># Define uma âncora com um bloco de configuração
+config_padrao_app: &config_app
+  memoria: 256M
+  restart: always
+
+# Reutiliza a âncora nos serviços
+servico_api:
+  <<: *config_app # Mescla a âncora aqui
+  nome: "API Principal"
+  build: ./api
+
+servico_worker:
+  <<: *config_app # Mescla a âncora aqui
+  nome: "Worker de Fila"
+  build: ./worker</code></pre>
+                                </div>
+                                <div class="prose prose-stone max-w-none">
+                                    <ul>
+                                        <li><code>&nome_da_ancora</code> define um bloco de dados reutilizável.</li>
+                                        <li><code>*nome_da_ancora</code> insere o bloco de dados definido pela âncora.</li>
+                                        <li><code>&lt;&lt;:</code> é uma chave especial de "mesclagem", que funde as chaves do alias no dicionário atual. É extremamente útil para herdar configurações padrão.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="exemplo" class="content-section">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-2">Exemplo Prático: `docker-compose.yml`</h2>
+                    <p class="mb-6 text-stone-600">Vamos analisar um arquivo `docker-compose.yml`, um uso muito comum de YAML. **Clique nas seções destacadas do código** para ver uma explicação detalhada sobre o que cada parte faz e qual conceito de YAML ela utiliza.</p>
+                    
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="code-block">
+                            <pre class="font-code text-sm interactive-yaml"><code class="language-yaml">
+<span data-key="version">version: "3.9"</span>
+
+<span data-key="services">services:</span>
+  <span data-key="service-web">web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf</span>
+
+  <span data-key="service-db">database:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: meudb
+      POSTGRES_USER: usuario
+    volumes:
+      - db-data:/var/lib/postgresql/data</span>
+
+<span data-key="volumes">volumes:
+  db-data: {}</span>
+</code></pre>
+                        </div>
+                        <div id="explanation-box" class="bg-blue-50 border border-blue-200 rounded-lg p-6 transition-all duration-300 min-h-[200px]">
+                            <h3 id="explanation-title" class="text-lg font-bold text-blue-800 mb-2">Selecione uma seção do código</h3>
+                            <p id="explanation-text" class="text-blue-900">Clique em uma das áreas destacadas à esquerda para aprender sobre sua função e a sintaxe YAML correspondente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="text-center mt-10 text-sm text-stone-500">
+            <p>Criado para facilitar o aprendizado de YAML.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            
+            const explanations = {
+                'version': {
+                    title: 'Chave: version',
+                    text: 'Este é um par chave-valor simples no nível raiz do documento. A chave é `version` e o valor é a string `"3.9"`. Ele define a versão da especificação do Docker Compose a ser usada.'
+                },
+                'services': {
+                    title: 'Chave: services (Mapeamento)',
+                    text: 'A chave `services` inicia um mapeamento (dicionário). Os itens aninhados, `web` e `database`, são as chaves deste dicionário, e seus conteúdos são os valores (que por sua vez são outros dicionários).'
+                },
+                'service-web': {
+                    title: 'Serviço: web (Mapeamento Aninhado)',
+                    text: '`web` é uma chave dentro do mapeamento `services`. Seu valor é outro mapeamento que define um contêiner. Note a indentação, que cria essa hierarquia.'
+                },
+                'service-db': {
+                    title: 'Serviço: database (Mapeamento Aninhado)',
+                    text: 'Assim como `web`, `database` define outro serviço. Ele contém chaves como `image`, `restart` e um mapeamento aninhado para `environment`.'
+                },
+                'volumes': {
+                    title: 'Chave: volumes (Lista e Mapeamento)',
+                    text: '`volumes` no nível raiz define volumes nomeados que podem ser compartilhados entre contêineres. Neste caso, `db-data` é uma chave para um mapeamento vazio `{}`, que instrui o Docker a criar um volume com as configurações padrão.'
+                },
+                'initial': {
+                    title: 'Selecione uma seção do código',
+                    text: 'Clique em uma das áreas destacadas à esquerda para aprender sobre sua função e a sintaxe YAML correspondente.'
+                }
+            };
+
+            const interactiveSpans = document.querySelectorAll('.interactive-yaml span');
+            const explanationBox = document.getElementById('explanation-box');
+            const explanationTitle = document.getElementById('explanation-title');
+            const explanationText = document.getElementById('explanation-text');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contentSections.forEach(s => s.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
+            
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const codeBlock = button.closest('.code-block');
+                    const code = codeBlock.querySelector('code').innerText;
+                    navigator.clipboard.writeText(code).then(() => {
+                        button.innerText = 'Copiado!';
+                        setTimeout(() => {
+                            button.innerText = 'Copiar';
+                        }, 2000);
+                    });
+                });
+            });
+
+            interactiveSpans.forEach(span => {
+                span.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const key = span.dataset.key;
+                    const explanation = explanations[key] || explanations['initial'];
+
+                    interactiveSpans.forEach(s => s.classList.remove('selected'));
+                    span.classList.add('selected');
+
+                    explanationBox.classList.remove('bg-blue-50', 'border-blue-200');
+                    explanationBox.classList.add('bg-yellow-50', 'border-yellow-200');
+                    
+                    explanationTitle.textContent = explanation.title;
+                    explanationText.textContent = explanation.text;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

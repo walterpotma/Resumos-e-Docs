@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo de Dockerfile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals -->
+    <!-- Application Structure Plan: A aplicação foi estruturada como uma SPA (Single Page Application) temática e progressiva. A navegação fixa no topo permite acesso rápido a qualquer seção, funcionando tanto como um tutorial linear quanto como uma referência rápida. A estrutura é dividida em: 1. Introdução (O que é?), 2. Anatomia Interativa (o núcleo, para aprendizado ativo), 3. Comandos Detalhados (referência), 4. Builds em Múltiplos Estágios (conceito avançado comparativo) e 5. Melhores Práticas (dicas rápidas). Esta arquitetura foi escolhida para decompor um tópico técnico complexo em partes gerenciáveis e interativas, facilitando a absorção do conteúdo e o engajamento do usuário. -->
+    <!-- Visualization & Content Choices: 1. Anatomia do Dockerfile: Report Info -> Comandos do Dockerfile. Goal -> Informar/Organizar. Viz -> Bloco de código interativo. Interaction -> Clicar nos comandos para exibir detalhes. Justification -> Fomenta o aprendizado ativo e focado, evitando sobrecarga de informação. Library/Method -> Vanilla JS. 2. Builds em Múltiplos Estágios: Report Info -> Comparação de tamanho de imagem. Goal -> Comparar. Viz -> Gráfico de barras horizontais (Chart.js) e blocos de código alternáveis. Interaction -> Botão de toggle para alternar entre as visões e atualizar o gráfico. Justification -> A comparação visual direta é a forma mais eficaz de demonstrar o benefício da técnica. Library/Method -> Chart.js + Vanilla JS. 3. Melhores Práticas: Report Info -> Dicas e regras. Goal -> Informar. Viz -> Layout de cartões. Interaction -> Nenhuma, foco na clareza e legibilidade. Justification -> Formato ideal para listas de recomendações. Library/Method -> HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        code, .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        .command-highlight {
+            cursor: pointer;
+            font-weight: 500;
+            color: #007bff;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            transition: background-color 0.2s;
+        }
+        .command-highlight.active {
+            background-color: #cfe2ff;
+            border-radius: 4px;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            max-height: 250px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-blue-600">🐳 Guia Dockerfile</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#intro" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">O Que é?</a>
+                        <a href="#anatomy" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Anatomia</a>
+                        <a href="#multistage" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Múltiplos Estágios</a>
+                        <a href="#best-practices" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Melhores Práticas</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="intro" class="mb-16 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Desmistificando o Dockerfile</h1>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600">
+                Um Dockerfile é um roteiro, um arquivo de texto simples que contém todas as instruções necessárias para o Docker montar uma imagem. Pense nele como uma receita de bolo: cada linha é um passo para criar o ambiente perfeito e padronizado para sua aplicação rodar em qualquer lugar.
+            </p>
+        </section>
+
+        <section id="anatomy" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">Anatomia de um Dockerfile</h2>
+                <p class="mt-2 text-md text-slate-600 max-w-2xl mx-auto">
+                    Todo Dockerfile é composto por uma série de comandos. Clique em cada instrução no exemplo abaixo para ver uma explicação detalhada de sua função, sintaxe e como ela contribui para a construção da imagem final.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6 text-sm text-gray-200 overflow-x-auto">
+                    <pre><code class="language-dockerfile"><span class="text-gray-500"># Estágio 1: Build</span>
+<span class="command-highlight active" data-command="FROM">FROM</span> node:18-alpine AS builder
+
+<span class="command-highlight" data-command="WORKDIR">WORKDIR</span> /app
+
+<span class="command-highlight" data-command="COPY">COPY</span> package*.json ./
+
+<span class="command-highlight" data-command="RUN">RUN</span> npm install
+
+<span class="command-highlight" data-command="COPY">COPY</span> . .
+
+<span class="command-highlight" data-command="RUN">RUN</span> npm run build
+
+<span class="text-gray-500"># Estágio 2: Produção</span>
+<span class="command-highlight" data-command="FROM">FROM</span> nginx:stable-alpine
+
+<span class="command-highlight" data-command="COPY">COPY</span> --from=builder /app/build /usr/share/nginx/html
+
+<span class="command-highlight" data-command="EXPOSE">EXPOSE</span> 80
+
+<span class="command-highlight" data-command="CMD">CMD</span> ["nginx", "-g", "daemon off;"]
+</code></pre>
+                </div>
+                <div id="command-details" class="bg-white p-6 rounded-lg shadow-lg border border-slate-200 min-h-[300px]">
+                </div>
+            </div>
+        </section>
+        
+        <section id="multistage" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">Construção em Múltiplos Estágios</h2>
+                <p class="mt-2 text-md text-slate-600 max-w-2xl mx-auto">
+                    Uma das técnicas mais importantes para otimizar imagens é o "multi-stage build". O objetivo é usar um estágio para compilar ou construir a aplicação (com todas as suas dependências de desenvolvimento) e um estágio final, muito menor, apenas com os arquivos necessários para rodar, resultando em imagens mais leves e seguras.
+                </p>
+                 <button id="toggle-build-type" class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                    Ver Exemplo Simples (Sem Otimização)
+                </button>
+            </div>
+           
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div id="code-multistage" class="bg-gray-800 rounded-lg shadow-lg p-4 text-sm text-gray-200 overflow-x-auto">
+                    <h3 class="font-bold text-lg mb-2 text-white text-center">✅ Otimizado (Multi-Stage)</h3>
+                    <pre><code class="language-dockerfile"><span class="text-gray-500"># Build stage</span>
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+<span class="text-gray-500"># Production stage</span>
+FROM nginx:stable-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+</code></pre>
+                </div>
+                <div id="code-singlestage" class="bg-gray-800 rounded-lg shadow-lg p-4 text-sm text-gray-200 overflow-x-auto hidden">
+                     <h3 class="font-bold text-lg mb-2 text-white text-center">❌ Não Otimizado (Single-Stage)</h3>
+                    <pre><code class="language-dockerfile">FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run build
+
+# Problema: A imagem final contém
+# todo o código fonte e as 
+# node_modules, sendo muito grande.
+
+EXPOSE 3000
+CMD ["npm", "start"]
+</code></pre>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-slate-200">
+                    <h3 class="text-xl font-bold text-center mb-4">Impacto no Tamanho da Imagem</h3>
+                    <div class="chart-container">
+                        <canvas id="imageSizeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="best-practices">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">Melhores Práticas</h2>
+                <p class="mt-2 text-md text-slate-600 max-w-2xl mx-auto">
+                    Escrever um bom Dockerfile é uma arte. Seguir estas práticas resultará em builds mais rápidos, imagens menores e mais seguras, facilitando a manutenção e o deploy de suas aplicações.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Use .dockerignore</h3>
+                    <p class="text-slate-600">Exclua arquivos e diretórios desnecessários (como `node_modules`, logs, `.git`) do contexto do build para acelerar o processo e evitar que informações sensíveis vazem para a imagem.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Minimize o número de camadas</h3>
+                    <p class="text-slate-600">Cada instrução `RUN`, `COPY` e `ADD` cria uma nova camada. Combine comandos `RUN` com `&&` para reduzir o número de camadas e, consequentemente, o tamanho da imagem.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Ordene os comandos estrategicamente</h3>
+                    <p class="text-slate-600">Coloque as instruções que mudam com menos frequência (ex: instalar dependências) antes das que mudam sempre (ex: copiar o código-fonte) para aproveitar o cache de camadas do Docker.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Use imagens base específicas</h3>
+                    <p class="text-slate-600">Evite usar a tag `:latest`. Especifique versões exatas (ex: `node:18.12-alpine`) para garantir builds consistentes e evitar que atualizações inesperadas quebrem sua aplicação.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Prefira `COPY` em vez de `ADD`</h3>
+                    <p class="text-slate-600">`ADD` tem funcionalidades "mágicas", como descompactar arquivos e baixar de URLs, o que pode ser um risco de segurança. Use `COPY` para maior clareza e previsibilidade.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 hover:shadow-xl transition-shadow">
+                    <h3 class="font-bold text-lg mb-2 text-blue-600">Execute como usuário não-root</h3>
+                    <p class="text-slate-600">Por segurança, crie um usuário específico com a instrução `USER` e execute sua aplicação com ele, seguindo o princípio do menor privilégio para reduzir a superfície de ataque.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-800 text-white mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+            <p>&copy; 2025 Guia Interativo de Dockerfile. Criado para facilitar o aprendizado.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const commandDetailsData = {
+                FROM: {
+                    title: 'FROM',
+                    description: 'Define a imagem base para as instruções subsequentes. Todo Dockerfile válido deve começar com uma instrução `FROM`.',
+                    syntax: '<code>FROM &lt;imagem&gt;[:&lt;tag&gt;] [AS &lt;nome&gt;]</code>'
+                },
+                RUN: {
+                    title: 'RUN',
+                    description: 'Executa qualquer comando em uma nova camada sobre a imagem atual e commita o resultado. É frequentemente usado para instalar pacotes de software.',
+                    syntax: '<code>RUN &lt;comando&gt;</code> (shell form) ou <code>RUN ["executável", "param1", "param2"]</code> (exec form)'
+                },
+                CMD: {
+                    title: 'CMD',
+                    description: 'Fornece um comando padrão para a execução de um contêiner. Só pode haver uma instrução `CMD` em um Dockerfile. Se houver mais de uma, apenas a última terá efeito.',
+                    syntax: '<code>CMD ["executável","param1","param2"]</code> (exec form, preferencial)'
+                },
+                WORKDIR: {
+                    title: 'WORKDIR',
+                    description: 'Define o diretório de trabalho para quaisquer instruções `RUN`, `CMD`, `ENTRYPOINT`, `COPY` e `ADD` que o seguem no Dockerfile.',
+                    syntax: '<code>WORKDIR /caminho/para/diretorio</code>'
+                },
+                COPY: {
+                    title: 'COPY',
+                    description: 'Copia novos arquivos ou diretórios do contexto do build e os adiciona ao sistema de arquivos do contêiner no caminho especificado.',
+                    syntax: '<code>COPY [--from=&lt;nome_ou_indice_do_estagio&gt;] &lt;origem&gt; &lt;destino&gt;</code>'
+                },
+                EXPOSE: {
+                    title: 'EXPOSE',
+                    description: 'Informa ao Docker que o contêiner escuta em portas de rede específicas em tempo de execução. Não publica a porta, apenas funciona como um tipo de documentação entre a pessoa que constrói a imagem e a que a executa.',
+                    syntax: '<code>EXPOSE &lt;porta&gt;[/&lt;protocolo&gt;]</code>'
+                }
+            };
+
+            const detailsContainer = document.getElementById('command-details');
+            const commandHighlights = document.querySelectorAll('.command-highlight');
+
+            function updateDetails(commandKey) {
+                const details = commandDetailsData[commandKey];
+                if (details) {
+                    detailsContainer.innerHTML = `
+                        <h3 class="text-2xl font-bold text-blue-600 mb-2 code-font">${details.title}</h3>
+                        <p class="text-slate-700 mb-4">${details.description}</p>
+                        <div class="bg-slate-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-slate-800 mb-1">Sintaxe:</h4>
+                            <p class="text-sm text-slate-600 code-font">${details.syntax}</p>
+                        </div>
+                    `;
+                }
+            }
+
+            commandHighlights.forEach(el => {
+                el.addEventListener('click', () => {
+                    commandHighlights.forEach(i => i.classList.remove('active'));
+                    el.classList.add('active');
+                    const commandKey = el.getAttribute('data-command');
+                    updateDetails(commandKey);
+                });
+            });
+
+            updateDetails('FROM');
+
+            const toggleButton = document.getElementById('toggle-build-type');
+            const codeMultistage = document.getElementById('code-multistage');
+            const codeSinglestage = document.getElementById('code-singlestage');
+            let isMultiStage = true;
+
+            const ctx = document.getElementById('imageSizeChart').getContext('2d');
+            const imageSizeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Tamanho da Imagem Final'],
+                    datasets: [{
+                        label: 'Não Otimizado (MB)',
+                        data: [750],
+                        backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Otimizado (MB)',
+                        data: [22],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + ' MB';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Tamanho (MB)'
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            toggleButton.addEventListener('click', () => {
+                isMultiStage = !isMultiStage;
+                if(isMultiStage) {
+                    toggleButton.textContent = 'Ver Exemplo Simples (Sem Otimização)';
+                    codeMultistage.classList.remove('hidden');
+                    codeSinglestage.classList.add('hidden');
+                } else {
+                    toggleButton.textContent = 'Ver Exemplo Otimizado (Multi-Stage)';
+                    codeMultistage.classList.add('hidden');
+                    codeSinglestage.classList.remove('hidden');
+                }
+            });
+            
+             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
