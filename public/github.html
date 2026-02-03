@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo do GitHub</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/github.css">
+    <script src="assets/js/github.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Beige, Charcoal, Muted Terracotta) -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar for navigation between thematic sections (Fundamentos, Comandos, Workflow, Colaboração). This structure provides a clear, non-linear exploration path, allowing users to jump directly to the content they need. Key interactions include an interactive command explorer for detailed explanations, visual diagrams for complex concepts like branching and merging, and a tabbed view for workflow examples, all designed to enhance understanding over passive reading. -->
+    <!-- Visualization & Content Choices: Report Info: GitHub concepts and commands -> Goal: Inform, Organize, Relate -> Viz: Interactive command explorer with explanations -> Interaction: Click on commands to see detailed explanations and examples -> Justification: For a command-heavy topic, interactive exploration is more effective than static documentation. | Report Info: Git workflow -> Goal: Explain Process -> Viz: Visual workflow diagrams -> Interaction: Step-by-step workflow with interactive elements -> Justification: Makes abstract concepts like branching and merging tangible through visual representation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-warm-beige text-charcoal">
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h1 class="sidebar-title">Guia GitHub</h1>
+            <nav id="sidebar-nav" class="sidebar-nav">
+                <a href="#fundamentos" class="sidebar-link">Fundamentos</a>
+                <a href="#comandos" class="sidebar-link">Comandos Git</a>
+                <a href="#workflow" class="sidebar-link">Workflow</a>
+                <a href="#colaboracao" class="sidebar-link">Colaboração</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="fundamentos" class="section">
+                <h2 class="section-title">Fundamentos do Git e GitHub</h2>
+                <p class="section-description">Git é um sistema de controle de versão distribuído que permite rastrear mudanças no código. GitHub é uma plataforma que hospeda repositórios Git e facilita a colaboração entre desenvolvedores.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Conceitos Essenciais</h3>
+                    <p class="card-description">Entenda os conceitos fundamentais que formam a base do Git e GitHub.</p>
+                    <div class="concepts-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Repositório</h4>
+                            <div class="concept-explanation">
+                                <p>Um <strong>repositório</strong> é um diretório que contém todos os arquivos do seu projeto, junto com o histórico de mudanças. Pode ser local (na sua máquina) ou remoto (no GitHub).</p>
+                                <div class="code-example">
+                                    <pre><code class="language-bash"># Criar repositório local
+git init
+
+# Clonar repositório remoto
+git clone https://github.com/usuario/projeto.git</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Commit</h4>
+                            <div class="concept-explanation">
+                                <p>Um <strong>commit</strong> é um snapshot das mudanças no seu código. Cada commit tem um ID único, uma mensagem descritiva e um timestamp.</p>
+                                <div class="code-example">
+                                    <pre><code class="language-bash"># Fazer commit das mudanças
+git add .
+git commit -m "Adiciona nova funcionalidade"
+
+# Ver histórico de commits
+git log --oneline</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Branch</h4>
+                            <div class="concept-explanation">
+                                <p>Uma <strong>branch</strong> é uma linha de desenvolvimento independente. Permite trabalhar em features sem afetar o código principal.</p>
+                                <div class="code-example">
+                                    <pre><code class="language-bash"># Criar nova branch
+git branch nova-feature
+
+# Mudar para a branch
+git checkout nova-feature
+
+# Criar e mudar em um comando
+git checkout -b nova-feature</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Merge</h4>
+                            <div class="concept-explanation">
+                                <p>O <strong>merge</strong> combina mudanças de diferentes branches. É como integrar o trabalho de uma branch em outra.</p>
+                                <div class="code-example">
+                                    <pre><code class="language-bash"># Fazer merge de uma branch
+git checkout main
+git merge nova-feature
+
+# Deletar branch após merge
+git branch -d nova-feature</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="comandos" class="section">
+                <h2 class="section-title">Explorador de Comandos Git</h2>
+                <p class="section-description">Explore os comandos mais importantes do Git. Clique em um comando para ver explicações detalhadas, exemplos práticos e casos de uso.</p>
+                
+                <div class="commands-layout">
+                    <div class="commands-sidebar">
+                        <div id="command-list" class="commands-list">
+                        </div>
+                    </div>
+                    <div id="command-details" class="command-details">
+                    </div>
+                </div>
+            </section>
+
+            <section id="workflow" class="section">
+                <h2 class="section-title">Workflows e Fluxos de Trabalho</h2>
+                <p class="section-description">Aprenda os workflows mais comuns no desenvolvimento com Git e GitHub, desde o básico até estratégias avançadas de colaboração.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Git Flow</h3>
+                    <p class="card-description">Um modelo de branching que define um fluxo rigoroso de desenvolvimento, ideal para projetos com releases regulares.</p>
+                    <div class="workflow-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Estrutura de Branches</h4>
+                            <div class="branch-diagram">
+                                <div class="branch-line main-branch">
+                                    <div class="branch-label">main</div>
+                                    <div class="branch-description">Código de produção estável</div>
+                                </div>
+                                <div class="branch-line develop-branch">
+                                    <div class="branch-label">develop</div>
+                                    <div class="branch-description">Código de desenvolvimento</div>
+                                </div>
+                                <div class="feature-branches">
+                                    <div class="branch-line feature-branch">
+                                        <div class="branch-label">feature/nova-funcionalidade</div>
+                                        <div class="branch-description">Nova funcionalidade</div>
+                                    </div>
+                                    <div class="branch-line feature-branch">
+                                        <div class="branch-label">feature/correcao-bug</div>
+                                        <div class="branch-description">Correção de bug</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Comandos do Git Flow</h4>
+                            <div class="workflow-commands">
+                                <div class="command-group">
+                                    <h5>Inicializar Git Flow</h5>
+                                    <pre><code class="language-bash">git flow init</code></pre>
+                                </div>
+                                <div class="command-group">
+                                    <h5>Criar Feature</h5>
+                                    <pre><code class="language-bash">git flow feature start nova-funcionalidade
+# Desenvolver...
+git flow feature finish nova-funcionalidade</code></pre>
+                                </div>
+                                <div class="command-group">
+                                    <h5>Release</h5>
+                                    <pre><code class="language-bash">git flow release start 1.0.0
+# Preparar release...
+git flow release finish 1.0.0</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">GitHub Flow</h3>
+                    <p class="card-description">Um workflow mais simples, focado em deploys contínuos e colaboração através de Pull Requests.</p>
+                    <div class="workflow-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Criar Branch</h4>
+                                <p>Crie uma branch a partir de main para cada nova funcionalidade</p>
+                                <pre><code class="language-bash">git checkout -b feature/nova-funcionalidade</code></pre>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Desenvolver</h4>
+                                <p>Faça commits regulares na sua branch</p>
+                                <pre><code class="language-bash">git add .
+git commit -m "Implementa nova funcionalidade"</code></pre>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Push e Pull Request</h4>
+                                <p>Envie sua branch para o GitHub e crie um Pull Request</p>
+                                <pre><code class="language-bash">git push origin feature/nova-funcionalidade</code></pre>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Review e Merge</h4>
+                                <p>Após aprovação, faça merge para main e delete a branch</p>
+                                <pre><code class="language-bash">git checkout main
+git pull origin main
+git branch -d feature/nova-funcionalidade</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="colaboracao" class="section">
+                <h2 class="section-title">Colaboração e Pull Requests</h2>
+                <p class="section-description">Aprenda a colaborar efetivamente usando Pull Requests, code reviews e as melhores práticas para trabalhar em equipe.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Pull Request - Guia Completo</h3>
+                    <p class="card-description">Um Pull Request é uma proposta de mudanças que permite discussão e revisão antes de integrar código.</p>
+                    <div class="pr-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Criando um Pull Request</h4>
+                            <div class="pr-steps">
+                                <div class="pr-step">
+                                    <h5>1. Fork do Repositório</h5>
+                                    <p>Se você não tem acesso de escrita, faça um fork do repositório original.</p>
+                                    <div class="code-example">
+                                        <pre><code class="language-bash"># Clonar seu fork
+git clone https://github.com/seu-usuario/repositorio.git
+cd repositorio
+
+# Adicionar remote do repositório original
+git remote add upstream https://github.com/original/repositorio.git</code></pre>
+                                    </div>
+                                </div>
+                                <div class="pr-step">
+                                    <h5>2. Criar Branch para Feature</h5>
+                                    <p>Sempre crie uma branch específica para sua funcionalidade.</p>
+                                    <div class="code-example">
+                                        <pre><code class="language-bash">git checkout -b feature/minha-funcionalidade</code></pre>
+                                    </div>
+                                </div>
+                                <div class="pr-step">
+                                    <h5>3. Desenvolver e Commitar</h5>
+                                    <p>Faça commits pequenos e descritivos durante o desenvolvimento.</p>
+                                    <div class="code-example">
+                                        <pre><code class="language-bash">git add .
+git commit -m "feat: adiciona validação de email"
+git push origin feature/minha-funcionalidade</code></pre>
+                                    </div>
+                                </div>
+                                <div class="pr-step">
+                                    <h5>4. Abrir Pull Request</h5>
+                                    <p>No GitHub, clique em "New Pull Request" e preencha o template.</p>
+                                    <div class="pr-template">
+                                        <h6>Template de PR:</h6>
+                                        <pre><code class="language-markdown">## Descrição
+Breve descrição das mudanças implementadas.
+
+## Tipo de Mudança
+- [ ] Bug fix
+- [ ] Nova funcionalidade
+- [ ] Breaking change
+- [ ] Documentação
+
+## Checklist
+- [ ] Código testado
+- [ ] Documentação atualizada
+- [ ] Sem conflitos</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Code Review - Boas Práticas</h4>
+                            <div class="review-tips">
+                                <div class="tip">
+                                    <h5>✅ O que revisar</h5>
+                                    <ul>
+                                        <li>Lógica e funcionalidade</li>
+                                        <li>Legibilidade do código</li>
+                                        <li>Performance e otimizações</li>
+                                        <li>Segurança e vulnerabilidades</li>
+                                        <li>Testes e documentação</li>
+                                    </ul>
+                                </div>
+                                <div class="tip">
+                                    <h5>💬 Como dar feedback</h5>
+                                    <ul>
+                                        <li>Seja construtivo e respeitoso</li>
+                                        <li>Explique o "porquê" das sugestões</li>
+                                        <li>Destaque pontos positivos também</li>
+                                        <li>Use emojis para tom amigável</li>
+                                        <li>Faça perguntas quando necessário</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Resolvendo Conflitos</h3>
+                    <p class="card-description">Conflitos acontecem quando duas pessoas modificam o mesmo arquivo. Aprenda a resolvê-los de forma eficiente.</p>
+                    <div class="conflict-resolution">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Tipos de Conflitos</h4>
+                            <div class="conflict-types">
+                                <div class="conflict-type">
+                                    <h5>Conflito de Merge</h5>
+                                    <p>Ocorre ao tentar fazer merge de branches com mudanças conflitantes.</p>
+                                    <div class="code-example">
+                                        <pre><code class="language-bash">git merge feature-branch
+# Auto-merging arquivo.js
+# CONFLICT (content): Merge conflict in arquivo.js
+# Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+                                    </div>
+                                </div>
+                                <div class="conflict-type">
+                                    <h5>Conflito de Rebase</h5>
+                                    <p>Ocorre durante rebase quando há mudanças conflitantes.</p>
+                                    <div class="code-example">
+                                        <pre><code class="language-bash">git rebase main
+# CONFLICT (content): Merge conflict in arquivo.js
+# error: could not apply abc1234... commit message</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Como Resolver</h4>
+                            <div class="resolution-steps">
+                                <div class="resolution-step">
+                                    <h5>1. Identificar Arquivos Conflitantes</h5>
+                                    <pre><code class="language-bash">git status</code></pre>
+                                </div>
+                                <div class="resolution-step">
+                                    <h5>2. Editar Arquivos</h5>
+                                    <p>Remova os marcadores de conflito e escolha qual código manter:</p>
+                                    <pre><code class="language-javascript"><<<<<<< HEAD
+console.log("Versão atual");
+=======
+console.log("Nova versão");
+>>>>>>> feature-branch</code></pre>
+                                </div>
+                                <div class="resolution-step">
+                                    <h5>3. Marcar como Resolvido</h5>
+                                    <pre><code class="language-bash">git add arquivo.js
+git commit -m "Resolve conflito de merge"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

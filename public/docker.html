@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo do Docker e Dockerfile</title>
+    <link rel="stylesheet" href="assets/css/docker.css">
+    <script src="assets/js/docker.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Beige, Charcoal, Muted Terracotta) -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar for navigation between thematic sections (Intro, Dockerfile, Commands, Best Practices, Examples). This structure provides a clear, non-linear exploration path, allowing users to jump directly to the content they need. Key interactions include a command explorer for detailed comparisons, visual diagrams for complex concepts like layers and VMs vs. containers, and a tabbed view for code examples, all designed to enhance understanding over passive reading. -->
+    <!-- Visualization & Content Choices: Report Info: Docker vs. VM -> Goal: Compare -> Viz: HTML/CSS diagram -> Interaction: Hover tooltips -> Justification: Visually clarifies the core architectural difference. | Report Info: Dockerfile Layers/Cache -> Goal: Explain Process -> Viz: JS-animated HTML divs -> Interaction: Click-to-simulate rebuild -> Justification: Makes an abstract concept tangible. | Report Info: Command Comparisons (COPY/ADD, CMD/ENTRYPOINT) -> Goal: Compare/Inform -> Presentation: Interactive click-to-reveal panel -> Interaction: User selects command to view details -> Justification: Allows focused, side-by-side comparison which is more effective than scrolling through text. | Report Info: Code Examples -> Goal: Provide Reference -> Presentation: Tabbed interface -> Interaction: Click tabs -> Justification: Organizes code for different languages cleanly in one space. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-warm-beige text-charcoal">
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h1 class="sidebar-title">Guia Docker</h1>
+            <nav id="sidebar-nav" class="sidebar-nav">
+                <a href="#fundamentos" class="sidebar-link">Fundamentos</a>
+                <a href="#dockerfile" class="sidebar-link">O Dockerfile</a>
+                <a href="#comandos" class="sidebar-link">Comandos</a>
+                <a href="#praticas" class="sidebar-link">Boas Práticas</a>
+                <a href="#exemplos" class="sidebar-link">Exemplos</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="fundamentos" class="section">
+                <h2 class="section-title">Fundamentos do Docker</h2>
+                <p class="section-description">O Docker resolve o clássico problema "na minha máquina funciona" ao empacotar uma aplicação com todas as suas dependências em unidades padronizadas chamadas contêineres. Isso garante consistência entre os ambientes de desenvolvimento, teste e produção.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Docker vs. Máquinas Virtuais (VMs)</h3>
+                    <p class="card-description">Ambos isolam ambientes, mas de formas fundamentalmente diferentes. As VMs virtualizam o hardware, executando um sistema operacional completo. Os contêineres Docker virtualizam o sistema operacional, compartilhando o kernel do host, o que os torna muito mais leves e rápidos.</p>
+                    <div class="comparison-grid">
+                        <div class="comparison-item vm-item">
+                            <h4 class="comparison-title">Máquina Virtual</h4>
+                            <div class="vm-stack">
+                                <div class="app-container">
+                                    <p class="app-label">App A</p>
+                                    <div class="libs-layer">Libs/Bins</div>
+                                    <div class="os-layer">Guest OS</div>
+                                </div>
+                                <div class="app-container">
+                                    <p class="app-label">App B</p>
+                                    <div class="libs-layer">Libs/Bins</div>
+                                    <div class="os-layer">Guest OS</div>
+                                </div>
+                                <div class="hypervisor-layer">Hipervisor</div>
+                                <div class="host-layer">Host OS + Infraestrutura</div>
+                            </div>
+                        </div>
+                        <div class="comparison-item docker-item">
+                            <h4 class="comparison-title">Contêiner Docker</h4>
+                            <div class="docker-stack">
+                                <div class="apps-row">
+                                    <div class="app-container">
+                                        <p class="app-label">App A</p>
+                                        <div class="libs-layer">Libs/Bins</div>
+                                    </div>
+                                    <div class="app-container">
+                                        <p class="app-label">App B</p>
+                                        <div class="libs-layer">Libs/Bins</div>
+                                    </div>
+                                </div>
+                                <div class="docker-engine-layer">Docker Engine</div>
+                                <div class="host-layer">Host OS + Infraestrutura</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dockerfile" class="section">
+                <h2 class="section-title">O Dockerfile: A Receita da Imagem</h2>
+                <p class="section-description">Um `Dockerfile` é um arquivo de texto com instruções para construir uma imagem Docker. Cada instrução cria uma camada. A ordem das instruções é crucial para otimizar o cache e acelerar os builds.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Camadas e Cache em Ação</h3>
+                    <p class="card-description">O Docker reutiliza camadas de builds anteriores (cache) se nada mudou. Se uma linha no Dockerfile muda, o cache é invalidado a partir daquele ponto e todas as camadas seguintes são reconstruídas. Clique no botão para simular uma mudança no código e veja o que acontece.</p>
+                    <div class="dockerfile-demo">
+                        <div class="dockerfile-section">
+                            <h4 class="demo-title">Exemplo de Dockerfile</h4>
+                            <div id="dockerfile-example" class="code-block">
+                                <div data-layer="1"><span class="keyword">FROM</span> node:20-alpine</div>
+                                <div data-layer="2"><span class="keyword">WORKDIR</span> /app</div>
+                                <div data-layer="3"><span class="keyword">COPY</span> package*.json .</div>
+                                <div data-layer="4"><span class="keyword">RUN</span> npm install</div>
+                                <div data-layer="5" id="code-copy-line"><span class="keyword">COPY</span> . .</div>
+                                <div data-layer="6"><span class="keyword">CMD</span> ["node", "server.js"]</div>
+                            </div>
+                            <button id="rebuild-btn" class="rebuild-button">Simular Mudança no Código e Reconstruir</button>
+                        </div>
+                        <div class="layers-section">
+                            <h4 class="demo-title">Visualização das Camadas</h4>
+                            <div id="layers-visualization" class="layers-container">
+                                <div class="layer" data-layer-vis="6">CMD</div>
+                                <div class="layer" data-layer-vis="5">COPY . .</div>
+                                <div class="layer" data-layer-vis="4">RUN npm install</div>
+                                <div class="layer" data-layer-vis="3">COPY package*.json</div>
+                                <div class="layer" data-layer-vis="2">WORKDIR</div>
+                                <div class="layer" data-layer-vis="1">FROM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="comandos" class="section">
+                <h2 class="section-title">Explorador de Comandos</h2>
+                <p class="section-description">Um `Dockerfile` é construído com uma série de comandos. Clique em um comando ou em uma comparação para entender sua função, sintaxe e as melhores práticas de uso.</p>
+                <div class="commands-layout">
+                    <div class="commands-sidebar">
+                        <div id="command-list" class="commands-list">
+                        </div>
+                    </div>
+                    <div id="command-details" class="command-details">
+                    </div>
+                </div>
+            </section>
+
+            <section id="praticas" class="section">
+                <h2 class="section-title">Boas Práticas para Produção</h2>
+                <p class="section-description">Construir imagens para produção requer atenção à segurança, tamanho e eficiência. Explore as técnicas mais importantes para criar `Dockerfiles` robustos.</p>
+                <div class="practices-list">
+                    <div class="card">
+                        <h3 class="card-title">Builds de Múltiplos Estágios</h3>
+                        <p class="card-description">Use múltiplos `FROM` em um `Dockerfile` para separar o ambiente de build do ambiente de produção. Isso resulta em imagens finais drasticamente menores e mais seguras, contendo apenas o necessário para executar a aplicação.</p>
+                        <div class="stages-demo">
+                            <div class="stages-container">
+                                <div class="stage-item builder-stage">
+                                    <h4 class="stage-title">Estágio 1: Builder</h4>
+                                    <p class="stage-description">Imagem completa com JDK, Maven, etc.</p>
+                                    <div class="stage-output">app.jar</div>
+                                </div>
+                                <div class="stage-arrow">&rarr;</div>
+                                <div class="stage-item final-stage">
+                                    <h4 class="stage-title">Estágio 2: Final</h4>
+                                    <p class="stage-description">Imagem mínima com JRE.</p>
+                                    <div class="stage-output">Copia apenas o app.jar</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Executar como Usuário Não-Root</h3>
+                        <p class="card-description">Por segurança, evite executar sua aplicação como usuário `root` dentro do contêiner. Use as instruções `RUN` para criar um usuário e `USER` para mudar para ele antes de iniciar a aplicação. Isso segue o princípio do menor privilégio.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Checklist de Otimização</h3>
+                        <ul class="checklist">
+                            <li>Use uma imagem base mínima (`alpine`, `slim`).</li>
+                            <li>Otimize a ordem das instruções para o cache.</li>
+                            <li>Utilize um arquivo `.dockerignore` para limpar o contexto.</li>
+                            <li>Combine comandos `RUN` para minimizar o número de camadas.</li>
+                            <li>Prefira `COPY` em vez de `ADD` para maior clareza.</li>
+                            <li>Use versões explícitas de imagens (`node:20-alpine` em vez de `node:latest`).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exemplos" class="section">
+                <h2 class="section-title">Exemplos Práticos</h2>
+                <p class="section-description">Veja como as melhores práticas se aplicam a `Dockerfiles` para diferentes linguagens e frameworks. Selecione uma tecnologia para ver um exemplo completo e comentado.</p>
+                <div class="examples-container">
+                    <div class="examples-tabs">
+                        <nav id="example-tabs" class="tabs-nav">
+                            <button class="tab-btn" data-target="nodejs">Node.js</button>
+                            <button class="tab-btn" data-target="python">Python/Django</button>
+                            <button class="tab-btn" data-target="java">Java/Spring</button>
+                        </nav>
+                    </div>
+                    <div id="example-content" class="examples-content">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

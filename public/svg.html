@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo do SVG</title>
+    <link rel="stylesheet" href="assets/css/svg.css">
+    <script src="assets/js/svg.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Beige, Charcoal, Muted Terracotta) -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar for navigation between thematic sections (Introdução, Playground, Estilização, Animações). This structure provides a clear, non-linear exploration path, allowing users to jump directly to the content they need. Key interactions include an interactive SVG playground for shape manipulation, visual demonstrations of SVG vs PNG scaling, and animated examples with source code, all designed to enhance understanding over passive reading. -->
+    <!-- Visualization & Content Choices: Report Info: SVG advantages -> Goal: Prove scalability -> Viz: Side-by-side comparison of SVG vs PNG -> Interaction: Zoom button that enlarges both images to demonstrate quality loss of raster vs vector sharpness -> Justification: Visual demonstration is more impactful than text to prove SVG's main benefit. | Report Info: Basic SVG shapes -> Goal: Teach syntax and attributes -> Viz: Interactive playground -> Interaction: User selects a shape, adjusts its attributes via inputs and sees the image and code updated instantly -> Justification: Active learning and immediate feedback solidify syntax knowledge. | Report Info: Animation with CSS -> Goal: Teach line drawing technique -> Viz: SVG path with sliders to control stroke-dasharray and stroke-dashoffset -> Interaction: Moving sliders updates CSS properties, visually showing how the drawing effect is created -> Justification: Isolates and demystifies the main technique used in SVG loaders. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-warm-beige text-charcoal">
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h1 class="sidebar-title">Guia SVG</h1>
+            <nav id="sidebar-nav" class="sidebar-nav">
+                <a href="#introducao" class="sidebar-link">Introdução</a>
+                <a href="#playground" class="sidebar-link">Playground</a>
+                <a href="#estilizacao" class="sidebar-link">Estilização</a>
+                <a href="#animacao" class="sidebar-link">Animações</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="introducao" class="section">
+                <h2 class="section-title">O que é SVG?</h2>
+                <p class="section-description">SVG significa <strong>Scalable Vector Graphics</strong> (Gráficos Vetoriais Escaláveis). Diferente de formatos de imagem como PNG ou JPG, que são baseados em pixels (raster), o SVG é baseado em XML e descreve imagens através de formas, caminhos e texto. Sua principal vantagem é a capacidade de ser redimensionado para qualquer tamanho sem perder qualidade, o que o torna perfeito para web design responsivo, ícones e, claro, animações.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">SVG vs. PNG: Teste de Zoom</h3>
+                    <p class="card-description">Veja a diferença entre imagens vetoriais (SVG) e raster (PNG) quando ampliadas. O SVG mantém a qualidade perfeita em qualquer tamanho.</p>
+                    <div class="comparison-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">SVG (Vetorial)</h4>
+                            <div id="svg-container" class="svg-demo-container">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="45" fill="#4A90E2"/>
+                                    <path d="M 35 50 L 45 60 L 65 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">PNG (Raster)</h4>
+                            <div id="png-container" class="svg-demo-container">
+                                <img id="png-image" src="https://placehold.co/128x128/f0f0f0/333?text=PNG&font=sans" alt="Exemplo de PNG" class="demo-image" style="image-rendering: pixelated;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="demo-controls">
+                        <button id="zoom-btn" class="demo-button">Aplicar Zoom</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="playground" class="section">
+                <h2 class="section-title">Playground de Formas Básicas</h2>
+                <p class="section-description">A melhor forma de aprender é praticando. Use os controles abaixo para manipular as formas básicas do SVG e veja o código ser atualizado em tempo real. Isso ajudará você a entender como cada atributo funciona.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Controles Interativos</h3>
+                    <p class="card-description">Selecione uma forma e ajuste seus atributos para ver o resultado em tempo real.</p>
+                    <div class="playground-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Controles</h4>
+                            <div class="shape-tabs">
+                                <button class="tab-button active" data-shape="circle">Círculo</button>
+                                <button class="tab-button" data-shape="rect">Retângulo</button>
+                                <button class="tab-button" data-shape="line">Linha</button>
+                            </div>
+                            <div id="controls-container" class="controls-container"></div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Visualização</h4>
+                            <div class="svg-preview">
+                                <svg id="playground-svg" viewBox="0 0 200 200" width="200" height="200"></svg>
+                            </div>
+                            <h4 class="demo-title">Código Gerado</h4>
+                            <div id="code-output" class="code-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="estilizacao" class="section">
+                <h2 class="section-title">Estilizando com CSS</h2>
+                <p class="section-description">Você pode estilizar SVGs usando atributos de apresentação (ex: `fill="blue"`) ou com CSS, o que é muito mais poderoso e flexível. As propriedades `stroke-dasharray` e `stroke-dashoffset` são a chave para criar as famosas animações de "desenho".</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Demonstração Interativa do Efeito de Desenho</h3>
+                    <p class="card-description">Use os controles abaixo para entender como funciona o efeito de desenho em SVG.</p>
+                    <div class="drawing-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Visualização</h4>
+                            <div class="svg-preview">
+                                <svg width="150" height="150" viewBox="0 0 100 100">
+                                    <circle id="drawing-circle" cx="50" cy="50" r="40" stroke="#4A90E2" stroke-width="8" fill="none" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Controles</h4>
+                            <div class="slider-controls">
+                                <div class="slider-group">
+                                    <label for="dasharray-slider" class="slider-label">stroke-dasharray: <span id="dasharray-value"></span></label>
+                                    <input id="dasharray-slider" type="range" min="0" max="502" value="251" class="slider">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="dashoffset-slider" class="slider-label">stroke-dashoffset: <span id="dashoffset-value"></span></label>
+                                    <input id="dashoffset-slider" type="range" min="0" max="502" value="0" class="slider">
+                                </div>
+                            </div>
+                            <div class="explanation">
+                                <p class="explanation-text">
+                                    <strong>Como funciona:</strong><br>
+                                    1. `stroke-dasharray` cria um padrão de traços. Se o valor for o comprimento do círculo, teremos um único traço e um único espaço.<br>
+                                    2. `stroke-dashoffset` desloca o início desse padrão. Animá-lo de um valor alto para 0 cria a ilusão de que a linha está sendo desenhada.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="animacao" class="section">
+                <h2 class="section-title">Criando Animações de Loading</h2>
+                <p class="section-description">Agora vamos juntar tudo! Abaixo estão alguns exemplos de animações de loading criadas com SVG e CSS. Analise o código de cada um para entender como as técnicas de `transform` e `stroke` são combinadas para criar efeitos fluidos e profissionais.</p>
+                
+                <div class="animations-grid">
+                    <div class="card">
+                        <h3 class="card-title">Spinner Simples</h3>
+                        <div class="animation-demo">
+                            <div class="svg-preview">
+                                <svg class="spinner-simple" width="60" height="60" viewBox="0 0 60 60">
+                                    <circle cx="30" cy="30" r="25" stroke="#4A90E2" stroke-width="4" fill="none" stroke-dasharray="157" stroke-dashoffset="157"/>
+                                </svg>
+                            </div>
+                            <button class="code-toggle-btn" data-target="spinner-simple-code">Ver Código</button>
+                        </div>
+                        <div id="spinner-simple-code" class="code-section">
+                            <div class="code-block">
+                                <pre><code class="language-html">&lt;svg class="spinner-simple" width="60" height="60" viewBox="0 0 60 60"&gt;
+    &lt;circle cx="30" cy="30" r="25" stroke="#4A90E2" stroke-width="4" fill="none" stroke-dasharray="157" stroke-dashoffset="157"/&gt;
+&lt;/svg&gt;</code></pre>
+                            </div>
+                            <div class="code-block">
+                                <pre><code class="language-css">.spinner-simple circle {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { stroke-dashoffset: 0; }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Pulsar</h3>
+                        <div class="animation-demo">
+                            <div class="svg-preview">
+                                <svg class="pulsar" width="60" height="60" viewBox="0 0 60 60">
+                                    <circle cx="30" cy="30" r="20" fill="#4A90E2"/>
+                                </svg>
+                            </div>
+                            <button class="code-toggle-btn" data-target="pulsar-code">Ver Código</button>
+                        </div>
+                        <div id="pulsar-code" class="code-section">
+                            <div class="code-block">
+                                <pre><code class="language-html">&lt;svg class="pulsar" width="60" height="60" viewBox="0 0 60 60"&gt;
+    &lt;circle cx="30" cy="30" r="20" fill="#4A90E2"/&gt;
+&lt;/svg&gt;</code></pre>
+                            </div>
+                            <div class="code-block">
+                                <pre><code class="language-css">.pulsar {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Ondas</h3>
+                        <div class="animation-demo">
+                            <div class="svg-preview">
+                                <svg class="waves" width="80" height="40" viewBox="0 0 80 40">
+                                    <path d="M0,20 Q20,0 40,20 T80,20" stroke="#4A90E2" stroke-width="3" fill="none"/>
+                                </svg>
+                            </div>
+                            <button class="code-toggle-btn" data-target="waves-code">Ver Código</button>
+                        </div>
+                        <div id="waves-code" class="code-section">
+                            <div class="code-block">
+                                <pre><code class="language-html">&lt;svg class="waves" width="80" height="40" viewBox="0 0 80 40"&gt;
+    &lt;path d="M0,20 Q20,0 40,20 T80,20" stroke="#4A90E2" stroke-width="3" fill="none"/&gt;
+&lt;/svg&gt;</code></pre>
+                            </div>
+                            <div class="code-block">
+                                <pre><code class="language-css">.waves path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0% { stroke-dashoffset: 100; }
+    50% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -100; }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

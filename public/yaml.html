@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo do YAML</title>
+    <link rel="stylesheet" href="assets/css/yaml.css">
+    <script src="assets/js/yaml.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Beige, Charcoal, Muted Terracotta) -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar for navigation between thematic sections (Fundamentos, Estruturas, Avançado, Exemplo). This structure provides a clear, non-linear exploration path, allowing users to jump directly to the content they need. Key interactions include an interactive YAML explorer for detailed syntax explanations, visual diagrams for complex concepts like data structures, and a tabbed view for code examples, all designed to enhance understanding over passive reading. -->
+    <!-- Visualization & Content Choices: Report Info: YAML syntax and concepts -> Goal: Inform, Organize, Relate -> Viz: Structured HTML/CSS code blocks -> Interaction: Tab navigation to switch between topics. Copy-to-clipboard buttons on code snippets -> Justification: For a syntax-heavy topic, clear, well-formatted code examples are the most effective teaching tool. | Report Info: Real-world docker-compose example -> Goal: Relate, Organize -> Viz: A styled HTML code block with an adjacent explanation panel -> Interaction: Key parts of the YAML code are clickable -> Justification: This creates a direct, interactive link between abstract rules and their practical application, which is highly effective for learning and retention. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-warm-beige text-charcoal">
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h1 class="sidebar-title">Guia YAML</h1>
+            <nav id="sidebar-nav" class="sidebar-nav">
+                <a href="#fundamentos" class="sidebar-link">Fundamentos</a>
+                <a href="#estruturas" class="sidebar-link">Estruturas de Dados</a>
+                <a href="#avancado" class="sidebar-link">Recursos Avançados</a>
+                <a href="#exemplo" class="sidebar-link">Exemplo Prático</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="fundamentos" class="section">
+                <h2 class="section-title">Sintaxe Essencial e Tipos de Dados</h2>
+                <p class="section-description">O YAML se baseia em dois conceitos principais: pares chave-valor para representar dados e indentação (espaços) para denotar estrutura. Ele infere automaticamente os tipos de dados mais comuns.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Conceitos Fundamentais</h3>
+                    <p class="card-description">O YAML é uma linguagem de serialização de dados legível por humanos. Sua simplicidade e clareza o tornam ideal para arquivos de configuração, especialmente em DevOps e desenvolvimento.</p>
+                    <div class="yaml-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Exemplo de Sintaxe Básica</h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml"># Pares Chave-Valor
+chave: valor
+
+# Strings (com ou sem aspas)
+nome_do_site: "Meu Site Incrível"
+outro_nome: Apenas um site
+
+# Números (inteiros e decimais)
+idade: 35
+preco: 19.99
+
+# Booleanos (verdadeiro ou falso)
+publicado: true
+em_destaque: false
+
+# Valor Nulo
+descricao: null</code></pre>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Pontos-Chave</h4>
+                            <ul class="key-points">
+                                <li><strong>Chave-Valor:</strong> A base de tudo no YAML. A sintaxe é `chave: valor`. Note o espaço após os dois pontos.</li>
+                                <li><strong>Indentação é Estrutura:</strong> O YAML usa espaços (não tabs!) para criar aninhamento e hierarquia. A consistência no número de espaços é crucial.</li>
+                                <li><strong>Comentários:</strong> Qualquer texto após um `#` é um comentário e é ignorado.</li>
+                                <li><strong>Tipos de Dados:</strong> YAML reconhece automaticamente `strings`, `números`, `booleanos` (`true`/`false`) e `null` (nulo).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="estruturas" class="section">
+                <h2 class="section-title">Estruturas de Dados: Listas e Dicionários</h2>
+                <p class="section-description">Para organizar dados, o YAML usa listas (sequências) e dicionários (mapeamentos). A combinação dessas duas estruturas permite modelar praticamente qualquer dado complexo.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Listas (Sequências)</h3>
+                    <p class="card-description">Listas são coleções ordenadas de itens. No YAML, você pode criar listas usando hífens ou colchetes.</p>
+                    <div class="yaml-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Sintaxe de Listas</h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml"># Uma lista simples de strings
+linguagens:
+  - Python
+  - JavaScript
+  - Go
+  - Rust
+
+# Lista inline (mais compacta)
+cores: [vermelho, verde, azul]
+
+# Lista de objetos
+desenvolvedores:
+  - nome: João
+    idade: 28
+    especialidade: Backend
+  - nome: Maria
+    idade: 32
+    especialidade: Frontend</code></pre>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Dicionários (Mapeamentos)</h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml"># Dicionário simples
+configuracao:
+  banco_dados:
+    host: localhost
+    porta: 5432
+    usuario: admin
+    senha: secret123
+
+# Dicionário inline
+contato: {nome: "João Silva", email: "joao@email.com"}
+
+# Estruturas aninhadas
+projeto:
+  nome: "Meu Projeto"
+  versao: "1.0.0"
+  dependencias:
+    - express
+    - mongoose
+  scripts:
+    start: "node server.js"
+    test: "npm test"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="avancado" class="section">
+                <h2 class="section-title">Recursos Avançados</h2>
+                <p class="section-description">O YAML oferece recursos poderosos para reutilização de código, referências e formatação avançada que tornam os arquivos mais limpos e organizados.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Ancoras e Referências</h3>
+                    <p class="card-description">Use âncoras (`&`) para definir valores reutilizáveis e referências (`*`) para referenciá-los. Isso evita duplicação e facilita a manutenção.</p>
+                    <div class="yaml-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Exemplo de Âncoras</h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml"># Definindo âncoras
+padroes: &padroes
+  timeout: 30
+  retries: 3
+  debug: false
+
+# Usando referências
+desenvolvimento:
+  <<: *padroes
+  debug: true
+  database_url: "localhost:5432"
+
+producao:
+  <<: *padroes
+  database_url: "prod-server:5432"
+  timeout: 60</code></pre>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Strings Multilinhas</h4>
+                            <div class="code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml"># String literal (preserva quebras de linha)
+descricao: |
+  Esta é uma descrição
+  que pode ter múltiplas
+  linhas e será preservada
+  exatamente como escrita.
+
+# String dobrada (quebra linhas em espaços)
+resumo: >
+  Esta é uma descrição
+  que será dobrada em uma
+  única linha com espaços
+  entre as palavras.
+
+# String com preservação (mantém quebras de linha finais)
+codigo: |+
+  function hello() {
+    console.log("Hello World");
+  }</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exemplo" class="section">
+                <h2 class="section-title">Exemplo Prático: Docker Compose</h2>
+                <p class="section-description">Veja como o YAML é usado na prática com um arquivo docker-compose real. Clique em diferentes partes do código para entender cada conceito.</p>
+                <div class="card">
+                    <h3 class="card-title">Docker Compose Interativo</h3>
+                    <p class="card-description">Este exemplo mostra um arquivo docker-compose.yml completo com múltiplos serviços, redes e volumes.</p>
+                    <div class="interactive-demo">
+                        <div class="demo-section">
+                            <h4 class="demo-title">Arquivo docker-compose.yml</h4>
+                            <div class="interactive-code-block">
+                                <button class="copy-btn">Copiar</button>
+                                <pre class="font-mono text-sm"><code class="language-yaml interactive-yaml"><span data-concept="version">version: '3.8'</span>
+
+<span data-concept="services">services:</span>
+  <span data-concept="web-service">web:</span>
+    <span data-concept="image">image:</span> nginx:alpine
+    <span data-concept="ports">ports:</span>
+      - <span data-concept="port-mapping">"80:80"</span>
+    <span data-concept="volumes">volumes:</span>
+      - <span data-concept="volume-mapping">./html:/usr/share/nginx/html</span>
+    <span data-concept="environment">environment:</span>
+      - <span data-concept="env-var">NGINX_HOST=localhost</span>
+      - <span data-concept="env-var">NGINX_PORT=80</span>
+    <span data-concept="depends-on">depends_on:</span>
+      - <span data-concept="service-dependency">app</span>
+
+  <span data-concept="app-service">app:</span>
+    <span data-concept="build">build:</span> .
+    <span data-concept="ports">ports:</span>
+      - <span data-concept="port-mapping">"3000:3000"</span>
+    <span data-concept="environment">environment:</span>
+      - <span data-concept="env-var">NODE_ENV=production</span>
+      - <span data-concept="env-var">DATABASE_URL=postgresql://user:pass@db:5432/mydb</span>
+    <span data-concept="depends-on">depends_on:</span>
+      - <span data-concept="service-dependency">db</span>
+
+  <span data-concept="db-service">db:</span>
+    <span data-concept="image">image:</span> postgres:13
+    <span data-concept="environment">environment:</span>
+      - <span data-concept="env-var">POSTGRES_DB=mydb</span>
+      - <span data-concept="env-var">POSTGRES_USER=user</span>
+      - <span data-concept="env-var">POSTGRES_PASSWORD=pass</span>
+    <span data-concept="volumes">volumes:</span>
+      - <span data-concept="named-volume">postgres_data:/var/lib/postgresql/data</span>
+
+<span data-concept="volumes">volumes:</span>
+  <span data-concept="named-volume">postgres_data:</span>
+
+<span data-concept="networks">networks:</span>
+  <span data-concept="default-network">default:</span>
+    <span data-concept="driver">driver:</span> bridge</code></pre>
+                            </div>
+                        </div>
+                        <div class="demo-section">
+                            <h4 class="demo-title">Explicação</h4>
+                            <div id="explanation-panel" class="explanation-panel">
+                                <p class="explanation-text">Clique em qualquer parte do código YAML acima para ver uma explicação detalhada.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
