@@ -1,0 +1,225 @@
+/* Docker Page Specific Styles */
+
+/* Comparison Grid */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.comparison-item {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.comparison-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--dark-charcoal);
+}
+
+.vm-stack, .docker-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-container {
+  background-color: var(--light-beige);
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.app-label {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.libs-layer, .os-layer, .hypervisor-layer, .docker-engine-layer, .host-layer {
+  padding: 0.25rem;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.libs-layer { background-color: #e6f3ff; }
+.os-layer { background-color: #ffe6e6; }
+.hypervisor-layer { background-color: #e6ffe6; }
+.docker-engine-layer { background-color: #fff2e6; }
+.host-layer { background-color: #f0f0f0; }
+
+.apps-row {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Dockerfile Demo */
+.dockerfile-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.code-block {
+  background-color: #f8f8f8;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.code-block div {
+  margin-bottom: 0.5rem;
+}
+
+.keyword {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.rebuild-button {
+  background-color: var(--muted-terracotta);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.rebuild-button:hover {
+  background-color: var(--accent);
+}
+
+.layers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.layer {
+  background-color: var(--light-beige);
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  border-left: 4px solid var(--muted-terracotta);
+  transition: all 0.3s;
+}
+
+.layer.rebuilt {
+  background-color: var(--success);
+  color: white;
+}
+
+.layer.cached {
+  opacity: 0.6;
+}
+
+/* Commands Section */
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.command-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.command-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--dark-charcoal);
+}
+
+.command-description {
+  margin-bottom: 1rem;
+}
+
+.command-example {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+/* Best Practices */
+.practices-list {
+  list-style: none;
+  padding: 0;
+}
+
+.practices-list li {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--accent);
+}
+
+.practice-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Examples */
+.example-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  background-color: var(--light-beige);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab-button.active {
+  background-color: var(--muted-terracotta);
+  color: white;
+}
+
+.example-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.example-code {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .dockerfile-demo {
+    grid-template-columns: 1fr;
+  }
+}

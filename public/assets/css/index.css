@@ -1,0 +1,19 @@
+/* Index Page Specific Styles */
+
+/* Hero Card */
+.hero-card {
+  background: linear-gradient(135deg, var(--light-beige) 0%, var(--warm-beige) 100%);
+  border-left: 5px solid var(--accent);
+}
+
+/* Guide Cards */
+.guide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: all 0.3s ease;
+}
+
+/* About Section */
+.about-card, .tech-card {
+  border-top: 3px solid var(--muted-terracotta);
+}

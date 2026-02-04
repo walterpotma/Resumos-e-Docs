@@ -1,0 +1,226 @@
+/* SVG Page Specific Styles */
+
+/* Comparison Demo */
+.comparison-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.svg-demo-container {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+  text-align: center;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.zoom-controls {
+  margin-top: 1rem;
+}
+
+.zoom-btn {
+  background-color: var(--muted-terracotta);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.zoom-btn:hover {
+  background-color: var(--accent);
+}
+
+/* SVG Playground */
+.svg-playground {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+  margin-top: 2rem;
+}
+
+.playground-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-label {
+  font-weight: bold;
+  color: var(--dark-charcoal);
+}
+
+.control-input {
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.color-input {
+  width: 50px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+}
+
+.playground-output {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.svg-canvas {
+  background-color: #f8f8f8;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-code {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Styling Section */
+.styling-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.styling-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.styling-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--dark-charcoal);
+}
+
+.styling-demo {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.styling-code {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+/* Animation Section */
+.animation-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.animation-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.animation-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--dark-charcoal);
+}
+
+.animation-demo {
+  margin-bottom: 1rem;
+  text-align: center;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animation-code {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+.animation-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.animation-btn {
+  background-color: var(--muted-terracotta);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.animation-btn:hover {
+  background-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comparison-demo {
+    grid-template-columns: 1fr;
+  }
+  .playground-controls {
+    grid-template-columns: 1fr;
+  }
+  .playground-output {
+    grid-template-columns: 1fr;
+  }
+  .styling-examples {
+    grid-template-columns: 1fr;
+  }
+  .animation-examples {
+    grid-template-columns: 1fr;
+  }
+}
